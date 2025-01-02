@@ -13,6 +13,7 @@ import exercises from "./routes/exercises.js";
 import workout from "./routes/workout.js";
 import auth from "./routes/auth.js";
 import schedule from "./routes/schedule.js";
+import suggestion from "./routes/suggestions.js";
 
 // connect to db
 connectDB();
@@ -31,6 +32,7 @@ app.use("/api/v1/exercises", exercises);
 app.use("/api/v1/workouts", workout);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/schedule", schedule);
+app.use("/api/v1/suggestions", suggestion);
 
 app.use(error);
 

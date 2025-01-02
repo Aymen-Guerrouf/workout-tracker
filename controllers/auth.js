@@ -60,29 +60,6 @@ export const logout = asyncHandler(async (req, res, next) => {
   });
 });
 
-const sendTokenResponse = (user, statusCode, res) => {
-  // create token
-  const token = user.getSignedJwtToken();
-
-  const options = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  };
-
-  let message;
-  if (statusCode === 200) {
-    message = "User logged in successfully";
-  }
-
-  res.status(statusCode).cookie("token", token, options).json({
-    success: true,
-    token,
-    message: message,
-  });
-};
-
 //@desc upadate user details
 //@route PUT /api/v1/auth/update
 //@access private
@@ -162,3 +139,20 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
 
   sendTokenResponse(user, 200, res);
 });
+
+const sendTokenResponse = (user, statusCode, res) => {
+  // create token
+  const token = user.getSignedJwtToken();
+
+  const options = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  res.status(statusCode).cookie("token", token, options).json({
+    success: true,
+    token,
+  });
+};

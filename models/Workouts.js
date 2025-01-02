@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { type } from "os";
+import Exercise from "./Exercises.js";
 
 const WorkoutSchema = new mongoose.Schema(
   {
@@ -21,6 +21,9 @@ const WorkoutSchema = new mongoose.Schema(
           ref: "Exercise",
           required: true,
         },
+        name: {
+          type: String,
+        },
         sets: {
           type: Number,
           required: true,
@@ -41,7 +44,8 @@ const WorkoutSchema = new mongoose.Schema(
         },
       },
     ],
-    staus: {
+    status: {
+      // Fixed the typo here
       type: String,
       enum: ["planned", "cancelled", "completed"],
       default: "planned",
@@ -60,6 +64,14 @@ const WorkoutSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+WorkoutSchema.pre("save", async function (next) {
+  for (const exercise of this.exercises) {
+    const exerciseData = await Exercise.findById(exercise.exercise); // Fixed field name
+    exercise.name = exerciseData.name;
+  }
+  next();
+});
 
 const Workout = mongoose.model("Workout", WorkoutSchema);
 
